@@ -1,0 +1,39 @@
+# .github/workflows/ci.yml
+
+name: CI Pipeline
+
+# Trigger the workflow on push and pull request events to the main branch
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-lint:
+    name: Build and Lint
+    runs-on: ubuntu-latest # Use the latest stable version of Ubuntu
+
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Specify the Node.js version
+          cache: "npm" # Enable caching for npm dependencies
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci # Use 'ci' for faster, more reliable installs in CI
+
+      # 4. Run linter to check for code quality issues
+      - name: Run linter
+        run: npm run lint
+
+      # 5. Run the build process to ensure the app compiles
+      - name: Run build
+        run: npm run build
