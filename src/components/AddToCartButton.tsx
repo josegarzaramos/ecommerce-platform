@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
-import { addItem } from "@/lib/redux/slices/cartSlice";
+import { addToCart } from "@/lib/redux/slices/cartSlice";
 import type { Product } from "@prisma/client";
 
 export type SerializableProduct = Omit<
@@ -21,7 +21,7 @@ export default function AddToCartButton({
   const dispatch = useAppDispatch();
 
   const handleAddToCart = () => {
-    dispatch(addItem(product));
+    dispatch(addToCart(product));
     alert(`${product.name} added to cart!`);
   };
 
