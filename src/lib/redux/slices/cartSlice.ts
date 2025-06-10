@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Product } from "@prisma/client"; // Reuse the type from Prisma
+import type { SerializableProduct } from "@/components/AddToCartButton";
 
-export interface CartItem extends Product {
+export interface CartItem extends SerializableProduct {
   quantity: number;
 }
 
@@ -17,7 +17,7 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItem: (state, action: PayloadAction<Product>) => {
+    addItem: (state, action: PayloadAction<SerializableProduct>) => {
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
