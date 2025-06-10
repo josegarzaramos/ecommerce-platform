@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import prisma from "@/lib/prisma";
 import type { Product } from "@prisma/client";
 
@@ -17,24 +18,19 @@ export default async function HomePage() {
   return (
     <main className="max-w-7xl mx-auto p-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Our Products</h1>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product) => (
           <Link key={product.id} href={`/products/${product.id}`}>
-            <div
-              key={product.id}
-              className="border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-            >
-              {product.images.length > 0 && (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center overflow-hidden rounded-t-lg">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
+            <div className="border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
+              <div className="relative w-full h-48 bg-gray-200 overflow-hidden rounded-t-lg">
+                <Image
+                  src={product.images[0] || "/images/placeholder.jpg"}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2 truncate">
                   {product.name}
