@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import AddToCartButton from "@/components/AddToCartButton";
 
 type ProductDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -23,6 +24,13 @@ export default async function ProductDetailPage({
     notFound();
   }
 
+  const serializableProduct = {
+    ...product,
+    price: product.price.toNumber(),
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
+  };
+
   return (
     <main className="max-w-7xl mx-auto p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -43,9 +51,8 @@ export default async function ProductDetailPage({
             <p className="text-3xl font-extrabold mb-6">
               ${product.price.toNumber().toFixed(2)}
             </p>
-            <button className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-              Add to Cart
-            </button>
+
+            <AddToCartButton product={serializableProduct} />
           </div>
         </div>
       </div>
