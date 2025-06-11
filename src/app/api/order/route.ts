@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 
-const shippingSchema = z.object({
+const orderSchema = z.object({
   email: z.string().email(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
@@ -24,21 +24,25 @@ const shippingSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const parsed = shippingSchema.safeParse(body);
+    const parsed = orderSchema.safeParse(body);
+
     if (!parsed.success) {
       return NextResponse.json(
         { success: false, message: "Invalid data." },
         { status: 400 }
       );
     }
+
     const { cartItems, ...shippingData } = parsed.data;
-    if (!cartItems.length) {
+
+    if (!cartItems || cartItems.length === 0) {
       return NextResponse.json(
         { success: false, message: "Cart is empty." },
         { status: 400 }
       );
     }
-    await prisma.order.create({
+
+    const newOrder = await prisma.order.create({
       data: {
         ...shippingData,
         items: {
@@ -56,12 +60,13 @@ export async function POST(req: NextRequest) {
         ),
       },
     });
+
     return NextResponse.json(
-      { success: true, message: "Order created!" },
+      { success: true, message: "Order created!", orderId: newOrder.id },
       { status: 201 }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Error creating order:", error);
     return NextResponse.json(
       { success: false, message: "Failed to create order." },
       { status: 500 }

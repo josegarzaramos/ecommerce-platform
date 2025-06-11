@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
@@ -21,6 +22,8 @@ const shippingSchema = z.object({
 type ShippingFormFields = z.infer<typeof shippingSchema>;
 
 export default function CheckoutForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -48,11 +51,14 @@ export default function CheckoutForm() {
       }),
     });
     const result = await response.json();
-    if (result.success) {
-      alert("Order placed! 🎉");
+    if (result.success && result.orderId) {
       dispatch(clearCart());
+
+      router.refresh();
+
+      router.push(`/order/success/${result.orderId}`);
     } else {
-      alert(result.message);
+      alert(result.message || "An unexpected error occurred.");
     }
   };
 
