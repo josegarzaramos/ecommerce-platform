@@ -45,7 +45,7 @@ async function main() {
 
   await prisma.product.createMany({
     data: products,
-    skipDuplicates: true,
+    skipDuplicates: true, // This is good practice to prevent errors if you run the seed again.
   });
 
   console.log("Seeding finished.");

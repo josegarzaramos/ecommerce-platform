@@ -13,4 +13,5 @@ export type SerializableProduct = Omit<
 
 export interface CartItem extends SerializableProduct {
   quantity: number;
+  images: string[];
 }

@@ -2,6 +2,8 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import { clearCart } from "@/lib/redux/slices/cartSlice";
 import { z } from "zod";
 
 const shippingSchema = z.object({
@@ -27,10 +29,31 @@ export default function CheckoutForm() {
     resolver: zodResolver(shippingSchema),
   });
 
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const dispatch = useAppDispatch();
+
   const onSubmit: SubmitHandler<ShippingFormFields> = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Form Submitted successfully:", data);
-    alert("Order placed! (Check the browser console for the form data)");
+    const response = await fetch("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...data,
+        cartItems: cartItems.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          images: item.images,
+        })),
+      }),
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert("Order placed! 🎉");
+      dispatch(clearCart());
+    } else {
+      alert(result.message);
+    }
   };
 
   return (
@@ -105,6 +128,57 @@ export default function CheckoutForm() {
           <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
         )}
       </div>
+      <div>
+        <label
+          htmlFor="city"
+          className="block text-sm font-medium text-gray-700"
+        >
+          City
+        </label>
+        <input
+          {...register("city")}
+          id="city"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.city && (
+          <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="postalCode"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Postal Code
+        </label>
+        <input
+          {...register("postalCode")}
+          id="postalCode"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.postalCode && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.postalCode.message}
+          </p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="country"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Country
+        </label>
+        <input
+          {...register("country")}
+          id="country"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+        {errors.country && (
+          <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>
+        )}
+      </div>
+
       <button
         type="submit"
         disabled={isSubmitting}
