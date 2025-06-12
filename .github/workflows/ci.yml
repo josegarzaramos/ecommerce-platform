@@ -1,5 +1,3 @@
-# .github/workflows/ci.yml
-
 name: CI Pipeline
 
 # Trigger the workflow on push and pull request events to the main branch
@@ -12,8 +10,10 @@ on:
 jobs:
   build-and-lint:
     name: Build and Lint
-    runs-on: ubuntu-latest # Use the latest stable version of Ubuntu
-
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
     steps:
       # 1. Check out the repository code
       - name: Checkout code
