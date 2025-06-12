@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
@@ -80,12 +81,12 @@ export default async function OrderSuccessPage({
         </div>
 
         <div className="mt-8">
-          <a
+          <Link
             href="/"
             className="rounded-md bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Continue Shopping
-          </a>
+          </Link>
         </div>
       </div>
     </div>
