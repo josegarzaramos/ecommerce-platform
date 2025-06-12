@@ -53,10 +53,18 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ session });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Stripe Checkout error:", error);
+    let errorMessage = "An unknown error occurred.";
+
+    if (error instanceof Stripe.errors.StripeError) {
+      errorMessage = error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
     return NextResponse.json(
-      { error: { message: error.message } },
+      { error: { message: errorMessage } },
       { status: 500 }
     );
   }
