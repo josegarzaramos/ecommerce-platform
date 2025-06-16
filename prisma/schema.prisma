@@ -1,19 +1,11 @@
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-enum Category {
-  CLOTHING
-  ELECTRONICS
-  FURNITURE
-  ACCESSORIES
-  BOOKS
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
@@ -49,17 +41,32 @@ model Order {
   postalCode String
   country    String
   total      Float
-  items      OrderItem[]
   createdAt  DateTime    @default(now())
+  items      OrderItem[]
 }
 
 model OrderItem {
-  id        String @id @default(uuid())
-  order     Order  @relation(fields: [orderId], references: [id])
+  id        String      @id @default(uuid())
   orderId   String
   productId String
   name      String
   price     Float
   quantity  Int
   image     String
+  status    OrderStatus @default(PENDING)
+  order     Order       @relation(fields: [orderId], references: [id])
+}
+
+enum Category {
+  CLOTHING
+  ELECTRONICS
+  FURNITURE
+  ACCESSORIES
+  BOOKS
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
 }

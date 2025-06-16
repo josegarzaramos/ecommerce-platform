@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Category" AS ENUM ('CLOTHING', 'ELECTRONICS', 'FURNITURE', 'ACCESSORIES', 'BOOKS');
 
+-- CreateEnum
+CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'PAID', 'FAILED');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -55,6 +58,7 @@ CREATE TABLE "OrderItem" (
     "price" DOUBLE PRECISION NOT NULL,
     "quantity" INTEGER NOT NULL,
     "image" TEXT NOT NULL,
+    "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
 
     CONSTRAINT "OrderItem_pkey" PRIMARY KEY ("id")
 );
