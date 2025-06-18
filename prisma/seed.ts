@@ -1,4 +1,4 @@
-import { PrismaClient, Category } from "@prisma/client";
+import { PrismaClient, Category, OrderStatus } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -48,6 +48,43 @@ async function main() {
     skipDuplicates: true,
   });
   console.log("Added product data");
+
+  const orders = [
+    {
+      email: "customer@example.com",
+      firstName: "John",
+      lastName: "Doe",
+      address: "123 Main St",
+      city: "Anytown",
+      postalCode: "12345",
+      country: "USA",
+      total: 299.5,
+      status: OrderStatus.PENDING,
+      items: {
+        create: [
+          {
+            productId: "clv899e9b000108ml9s5c7j7c",
+            name: "Modern Coffee Table",
+            price: 299.5,
+            quantity: 1,
+            image: "/images/table-1.jpg",
+          },
+        ],
+      },
+    },
+  ];
+
+  for (const order of orders) {
+    try {
+      await prisma.order.create({
+        data: order,
+      });
+    } catch (e) {
+      console.error(`Failed to create order for ${order.email}:`, e);
+    }
+  }
+  console.log("Added order data");
+
   console.log("Seeding finished.");
 }
 

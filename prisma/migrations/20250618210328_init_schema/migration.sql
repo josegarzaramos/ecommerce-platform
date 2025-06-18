@@ -44,6 +44,7 @@ CREATE TABLE "Order" (
     "postalCode" TEXT NOT NULL,
     "country" TEXT NOT NULL,
     "total" DOUBLE PRECISION NOT NULL,
+    "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
@@ -58,7 +59,6 @@ CREATE TABLE "OrderItem" (
     "price" DOUBLE PRECISION NOT NULL,
     "quantity" INTEGER NOT NULL,
     "image" TEXT NOT NULL,
-    "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
 
     CONSTRAINT "OrderItem_pkey" PRIMARY KEY ("id")
 );
