@@ -41,20 +41,20 @@ model Order {
   postalCode String
   country    String
   total      Float
+  status     OrderStatus @default(PENDING)
   createdAt  DateTime    @default(now())
   items      OrderItem[]
 }
 
 model OrderItem {
-  id        String      @id @default(uuid())
+  id        String @id @default(uuid())
   orderId   String
   productId String
   name      String
   price     Float
   quantity  Int
   image     String
-  status    OrderStatus @default(PENDING)
-  order     Order       @relation(fields: [orderId], references: [id])
+  order     Order  @relation(fields: [orderId], references: [id])
 }
 
 enum Category {
