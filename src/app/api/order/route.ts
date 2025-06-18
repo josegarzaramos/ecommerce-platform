@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
           (sum, item) => sum + item.price * item.quantity,
           0
         ),
+        status: "PENDING",
       },
     });
 
