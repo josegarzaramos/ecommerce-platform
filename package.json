@@ -20,6 +20,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.57.0",
     "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
     "stripe": "^18.2.1",
     "zod": "^3.25.61"
   },
