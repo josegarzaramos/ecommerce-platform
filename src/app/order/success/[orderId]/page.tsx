@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
+import { ClearCartOnSuccess } from "@/components/ClearCartOnSuccess";
 
 type OrderSuccessPageProps = {
   params: Promise<{ orderId: string }>;
@@ -32,6 +33,8 @@ export default async function OrderSuccessPage({
 
   return (
     <div className="py-16">
+      <ClearCartOnSuccess />
+
       <div className="container mx-auto max-w-2xl rounded-lg bg-white p-8 text-center shadow-lg">
         <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-gray-900">
@@ -63,7 +66,7 @@ export default async function OrderSuccessPage({
                   />
                 </div>
                 <div className="flex-grow">
-                  <p className="font-medium text-gray-800">{item.name}</p>
+                  <p className="font-medium">{item.name}</p>
                   <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
                 <p className="font-semibold text-gray-800">

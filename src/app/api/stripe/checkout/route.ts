@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       })),
       mode: "payment",
       metadata: { orderId: orderId },
-      success_url: `${baseUrl}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${baseUrl}/order/success/${orderId}`,
       cancel_url: `${baseUrl}/checkout`,
     });
 
